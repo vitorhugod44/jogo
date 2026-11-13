@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Primeira tela</title>
+    <style>
+        body {
+            margin: 0;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        .cenario {
+            position: relative;
+            aspect-ratio: 4 / 3;
+            height: 100vh;
+            max-width: 100vw;
+            background-image: url("inicio_cadavi.jpeg");
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            overflow: hidden;
+        }
+
+        /* Efeito de piscar os olhos (pálpebras superior e inferior) */
+        .palpebra-superior,
+        .palpebra-inferior {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background-color: #000;
+            z-index: 10;
+            animation-duration: 4.5s;
+            animation-fill-mode: forwards;
+        }
+
+        .palpebra-superior {
+            top: 0;
+            animation-name: piscarCima;
+        }
+
+        .palpebra-inferior {
+            bottom: 0;
+            animation-name: piscarBaixo;
+        }
+
+        @keyframes piscarCima {
+            0% { transform: translateY(0); }
+            15% { transform: translateY(0); }
+            30% { transform: translateY(-100%); }
+            45% { transform: translateY(0); }
+            60% { transform: translateY(-100%); }
+            100% { transform: translateY(-100%); }
+        }
+
+        @keyframes piscarBaixo {
+            0% { transform: translateY(0); }
+            15% { transform: translateY(0); }
+            30% { transform: translateY(100%); }
+            45% { transform: translateY(0); }
+            60% { transform: translateY(100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        /* Estilo da caixa de texto padronizado com o segundo código */
+        .mensagem {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.85);
+            color: #ff3333;
+            border: 2px solid #ff3333;
+            padding: 15px 30px;
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            border-radius: 5px;
+            text-align: center;
+            z-index: 5;
+            opacity: 0;
+            pointer-events: none;
+            width: auto;
+            max-width: 80%;
+            animation-fill-mode: forwards;
+        }
+
+        .msg-1 {
+            animation-name: exibirMsg1;
+            animation-duration: 4s;
+            animation-delay: 4.5s;
+        }
+
+        .msg-2 {
+            animation-name: exibirMsg2;
+            animation-duration: 4s;
+            animation-delay: 9s;
+        }
+
+        .msg-3 {
+            animation-name: exibirMsg3;
+            animation-duration: 4s;
+            animation-delay: 13.5s;
+        }
+
+        @keyframes exibirMsg1 {
+            0% { opacity: 0; }
+            15% { opacity: 1; }
+            85% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        @keyframes exibirMsg2 {
+            0% { opacity: 0; }
+            15% { opacity: 1; }
+            85% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        @keyframes exibirMsg3 {
+            0% { opacity: 0; }
+            15% { opacity: 1; }
+            85% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="cenario">
+        <div class="palpebra-superior"></div>
+        <div class="palpebra-inferior"></div>
+
+        <div class="mensagem msg-1">Você acordou em um lugar desconhecido</div>
+        <div class="mensagem msg-2">Você vê um cadáver no chão ao seu lado</div>
+        <div class="mensagem msg-3">Você escuta passos vindo na sua direção, você deve fugir o mais rápido possível</div>
+    </div>
+
+    <script>
+        // O tempo total das animações até a última mensagem sumir é:
+        // Delay da msg-3 (13.5s) + Duração da msg-3 (4s) = 17.5 segundos (17500 milissegundos)
+        setTimeout(function() {
+            window.location.href = "vou_pegar_usse.html";
+        }, 17500);
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Saída</title>
+
+    <style>
+        body {
+            margin: 0;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        .cenario {
+            position: relative;
+            aspect-ratio: 4 / 3;
+            height: 100vh;
+            max-width: 100vw;
+            background-image: url("saida.jpg");
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+        }
+
+        /* Área clicável invisível em cima da porta vermelha aberta */
+        .link-porta-vermelha {
+            position: absolute;
+            top: 22%;
+            left: 61%;
+            width: 18%;
+            height: 45%;
+            cursor: pointer;
+            background-color: transparent;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cenario">
+        <!-- Link para a próxima página ao clicar na porta vermelha aberta -->
+        <a href="Saida 2.html" class="link-porta-vermelha"></a>
+    </div>
+
+</body>
+</html>

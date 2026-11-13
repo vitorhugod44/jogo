@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Point and Click em Pure CSS</title>
+  <style>
+    /* Estilos Gerais do Canvas do Jogo */
+    body {
+      background-color: #121212;
+      color: #fff;
+      font-family: monospace;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .game-container {
+      position: relative;
+      width: 600px;
+      height: 400px;
+      background-color: #1e1e24;
+      border: 4px solid #444;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    /* Esconde os rádios de controle de estado */
+    input[type="radio"] {
+      display: none;
+    }
+
+    /* Caixa de Texto / Narrativa */
+    .textbox {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 70px;
+      background: rgba(0, 0, 0, 0.85);
+      border-top: 2px solid #444;
+      box-sizing: border-box;
+      padding: 12px;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    /* Cenário e Objetos Clicáveis */
+    .hotspot {
+      position: absolute;
+      cursor: pointer;
+      transition: transform 0.1s, border-color 0.2s;
+    }
+    .hotspot:hover {
+      transform: scale(1.05);
+    }
+
+    /* Objeto: Quadro na parede */
+    .picture-frame {
+      top: 40px;
+      left: 80px;
+      width: 90px;
+      height: 110px;
+      background: #8b5a2b;
+      border: 4px solid #5c3a1e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+    }
+
+    /* Objeto: Chave (escondida no início) */
+    .key {
+      top: 220px;
+      left: 110px;
+      width: 30px;
+      height: 30px;
+      background: #ffd700;
+      border-radius: 50%;
+      display: none; /* Escondida até mexer no quadro */
+      box-shadow: 0 0 10px #ffd700;
+    }
+
+    /* Objeto: Vaso de Planta */
+    .plant {
+      bottom: 80px;
+      left: 60px;
+      width: 70px;
+      height: 120px;
+      background: #2e8b57;
+      border-radius: 10px 10px 0 0;
+    }
+
+    /* Objeto: Porta de Saída */
+    .door {
+      top: 50px;
+      right: 60px;
+      width: 120px;
+      height: 280px;
+      background: #4a2e18;
+      border: 4px solid #2b1a0e;
+    }
+
+    /* Inventário Visual */
+    .inventory {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.6);
+      padding: 6px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      display: none;
+    }
+
+    /* Mensagem de Vitória */
+    .win-screen {
+      position: absolute;
+      inset: 0;
+      background: #111;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      color: #4caf50;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s;
+    }
+
+    /* ===================================================
+       LÓGICA CSS (MUDANÇA DE ESTADOS VIA :checked)
+       =================================================== */
+
+    /* 1. Estado Inicial */
+    .text-initial { display: block; }
+    .text-plant, .text-frame, .text-key, .text-door-locked { display: none; }
+
+    /* 2. Clicou no Vaso de Planta */
+    #st-plant:checked ~ .game-container .text-initial { display: none; }
+    #st-plant:checked ~ .game-container .text-plant { display: block; }
+
+    /* 3. Clicou no Quadro -> Revela a Chave */
+    #st-frame:checked ~ .game-container .text-initial { display: none; }
+    #st-frame:checked ~ .game-container .text-frame { display: block; }
+    #st-frame:checked ~ .game-container .key { display: block; }
+
+    /* 4. Clicou na Chave -> Pega o Item */
+    #st-key:checked ~ .game-container .text-initial { display: none; }
+    #st-key:checked ~ .game-container .text-frame { display: none; }
+    #st-key:checked ~ .game-container .text-key { display: block; }
+    #st-key:checked ~ .game-container .key { display: none; } /* Chave some do chão */
+    #st-key:checked ~ .game-container .inventory { display: block; } /* Aparece no inventário */
+
+    /* 5. Clicou na Porta sem a chave */
+    #st-door-locked:checked ~ .game-container .text-initial { display: none; }
+    #st-door-locked:checked ~ .game-container .text-door-locked { display: block; }
+
+    /* Se tiver a chave, a porta trancada some e dá lugar à porta de vitória */
+    #st-key:checked ~ .game-container .door-locked-label { display: none; }
+    #st-key:checked ~ .game-container .door-unlocked-label { display: block !important; }
+
+    /* 6. Clicou na Porta com a chave -> VENCEU */
+    #st-win:checked ~ .game-container .win-screen {
+      opacity: 1;
+      pointer-events: all;
+    }

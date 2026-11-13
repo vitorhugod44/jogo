@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Pure CSS QTE - Monstro</title>
+  <style>
+    /* Estilos Gerais do Cenas */
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      padding: 0;
+      background: #0d0d0d;
+      color: #fff;
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Container do Jogo */
+    .game-viewport {
+      position: relative;
+      width: 600px;
+      height: 400px;
+      background: #1a1a2e;
+      border: 4px solid #333;
+      overflow: hidden;
+      border-radius: 8px;
+    }
+
+    /* Esconder Inputs de Radio */
+    input[type="radio"] {
+      display: none;
+    }
+
+    /* Locais para Clicar (Esconderijos) */
+    .spot {
+      position: absolute;
+      bottom: 20px;
+      padding: 12px 20px;
+      background: #e94560;
+      color: white;
+      font-weight: bold;
+      border-radius: 4px;
+      cursor: pointer;
+      z-index: 5;
+      user-select: none;
+    }
+
+    .spot-left { left: 40px; }
+    .spot-right { right: 40px; }
+
+    .spot:hover {
+      background: #ff6b81;
+    }
+
+    /* Monstro (Surge de surpresa) */
+    .monster {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(0);
+      width: 150px;
+      height: 150px;
+      background: #8b0000;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: bold;
+      font-size: 1.2rem;
+      border: 3px solid red;
+      box-shadow: 0 0 20px red;
+      z-index: 2;
+      opacity: 0;
+
+      /* Animação que faz o monstro aparecer após 2 segundos */
+      animation: monsterAppears 4s forwards;
+      animation-delay: 1.5s;
+    }
+
+    /* Animação de Surgimento e Ataque do Monstro */
+    @keyframes monsterAppears {
+      0% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+      20% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+      70% { transform: translate(-50%, -50%) scale(1.2); opacity: 1; }
+      100% { transform: translate(-50%, -50%) scale(5); opacity: 1; }
+    }
+
+    /* Tela de Game Over (Aparece por padrão quando a animação termina) */
+    .game-over {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(139, 0, 0, 0.95);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 10;
+      opacity: 0;
+      pointer-events: none;
+      animation: showGameOver 0.1s forwards;
+      animation-delay: 5.4s; /* Aparece logo após o ataque do monstro */
+    }
+
+    @keyframes showGameOver {
+      to { opacity: 1; pointer-events: all; }
+    }
+
+    /* Tela de Vitória */
+    .victory {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: #27ae60;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 20;
+      display: none;
+    }
+
+    /* Botão de Reiniciar */
+    .btn-reset {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background: #fff;
+      color: #333;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 4px;
+    }
+
+    /* ---------------------------------------------------- */
+    /* A MÁGICA DO CSS: Detectando se acertou o esconderijo */
+    /* ---------------------------------------------------- */
+
+    /* Supondo que o esconderijo CERTO seja a DIREITA (#hide-right) */
+    #hide-right:checked ~ .victory {
+      display: flex; /* Exibe a tela de vitória */
+    }
+
+    /* Se escolher a ESQUERDA (#hide-left), aciona Game Over imediato */
+    #hide-left:checked ~ .game-over {
+      opacity: 1;
+      pointer-events: all;
+      animation: none;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="game-viewport">
+    <!-- Opções de Seleção (Radio Buttons) -->
+    <input type="radio" id="hide-left" name="hideout">
+    <input type="radio" id="hide-right" name="hideout">
+
+    <!-- Instrução -->
+    <p style="text-align: center; margin-top: 15px; font-weight: bold;">
+      Fique atento... Um monstro vai aparecer! Escolha o esconderijo certo!
+    </p>
+
+    <!-- O Monstro -->
+    <div class="monster">CIRURGIÃO!</div>
+
+    <!-- Botões / Esconderijos para Clicar -->
+    <label for="hide-left" class="spot spot-left">Esconder na Esquerda</label>
+    <label for="hide-right" class="spot spot-right">Esconder na Direita</label>
+
+    <!-- Tela de Game Over -->
+    <div class="game-over">
+      <h1>VOCÊ MORREU!</h1>
+      <p>O monstro te encontrou.</p>
+      <a href="" class="btn-reset">Tentar Novamente</a>
+    </div>
+
+    <!-- Tela de Vitória -->
+    <div class="victory">
+      <h1>VOCÊ SOBREVIVEU!</h1>
+      <p>Você se escondeu a tempo no lugar certo.</p>
+      <a href="" class="btn-reset">Jogar De Novo</a>
+    </div>
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,103 @@
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>O Hospital - Introdução</title>
+    <style>
+        body {
+            background-color: #000;
+            color: #fff;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* Container central onde as frases aparecem */
+        .intro-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            gap: 20px; /* Espaço de 20px entre uma frase e outra */
+            width: 80%;
+            max-width: 600px;
+        }
+
+        .texto-intro {
+            opacity: 0;
+            font-size: 22px;
+            letter-spacing: 1px;
+            color: #d1d1d1;
+            margin: 0;
+            text-align: center; /* Centralizado para ficar harmonioso */
+        }
+
+        /* Animação que faz a frase aparecer e FICAR na tela (forwards) */
+        @keyframes surgir {
+            0% { opacity: 0; transform: translateY(10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Animação final para o botão de começar (sem o translate que bugava) */
+        @keyframes revelarBotao {
+            0% { opacity: 0; transform: scale(0.9); }
+            100% { opacity: 1; transform: scale(1); }
+        }
+
+        /* Tempo de cada mensagem */
+        .msg-1 {
+            animation: surgir 1.5s ease-in-out 1s forwards;
+        }
+
+        .msg-2 {
+            animation: surgir 1.5s ease-in-out 4s forwards;
+        }
+
+        .msg-3 {
+            animation: surgir 1.5s ease-in-out 7s forwards;
+        }
+
+        /* O botão surge aos 10 segundos e FICA na tela */
+        .btn-continuar {
+            animation: revelarBotao 1.5s ease-in-out 10s forwards;
+            
+            /* Estilo do botão */
+            display: block;
+            width: fit-content;
+            margin-top: 15px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 15px 30px;
+            background-color: transparent;
+            color: #b71c1c;
+            text-decoration: none;
+            font-size: 20px;
+            font-family: inherit;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 5px;
+        }
+
+        .btn-continuar:hover {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="intro-container">
+        <!-- Sequência de mensagens -->
+        <p class="texto-intro msg-1">Você acorda em um lugar estranho...</p>
+        <p class="texto-intro msg-2">Tudo que se lembra foi de sair de casa e ser acertado na cabeça com algo contundente...</p>
+        <p class="texto-intro msg-3">Tenho que achar um jeito de sair daqui...</p>
+
+        <!-- Botão/Link final que surge para iniciar -->
+        <a href="jogo.html" class="texto-intro btn-continuar">&gt; Levantar</a>
+    </div>
+
+</body>
+</html>

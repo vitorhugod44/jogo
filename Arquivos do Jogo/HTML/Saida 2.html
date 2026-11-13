@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fuga</title>
+
+    <style>
+        html, body {
+            margin: 0;
+            height: 100%;
+            background-color: #000;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Checkbox invisível para controlar o estado da fuga */
+        #fugiu {
+            display: none;
+        }
+
+        .cenario {
+            position: relative;
+            aspect-ratio: 4 / 3;
+            height: 100vh;
+            max-width: 100vw;
+            max-height: 75vw;
+            background-color: #111; /* se a imagem falhar, o fundo não fica preto total */
+            /* Tenta a imagem na mesma pasta e, se não achar, na pasta de cima (../) */
+            background-image: url("saida2.jpg"), url("../saida2.jpg");
+            background-size: 100% 100%, 100% 100%;
+            background-repeat: no-repeat, no-repeat;
+        }
+
+        /* Área clicável da saída, invisível */
+        .area-saida {
+            position: absolute;
+            top: 25%;
+            left: 47%;
+            width: 11%;
+            height: 30%;
+            cursor: pointer;
+            background-color: transparent;
+            border: none;
+            z-index: 5;
+        }
+
+        /* Tela preta que cobre tudo ao clicar */
+        .tela-preta {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        .tela-preta video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: none;
+        }
+
+        /* Mensagem de vitória */
+        .mensagem-vitoria {
+            color: #00ff66;
+            border: 3px solid #00ff66;
+            padding: 20px 40px;
+            font-size: 32px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            border-radius: 8px;
+            background-color: rgba(0, 0, 0, 0.95);
+            text-align: center;
+            display: none;
+        }
+
+        #fugiu:checked ~ .tela-preta {
+            opacity: 1;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="cenario">
+        <input type="checkbox" id="fugiu">
+
+        <label for="fugiu" class="area-saida" id="btn-fugir"></label>
+
+        <div class="tela-preta">
+            <!-- O navegador tenta o primeiro caminho; se falhar, tenta o segundo -->
+            <video id="video-fuga" playsinline preload="auto">
+                <source src="mete_o_pe_loco.mp4" type="video/mp4">
+                <source src="../mete_o_pe_loco.mp4" type="video/mp4">
+            </video>
+            <div class="mensagem-vitoria" id="msg-vitoria">Você sobreviveu!!</div>
+        </div>
+    </div>
+
+    <script>
+        const checkboxFugiu = document.getElementById('fugiu');
+        const videoFuga = document.getElementById('video-fuga');
+        const msgVitoria = document.getElementById('msg-vitoria');
+
+        function mostrarVitoria() {
+            videoFuga.style.display = 'none';
+            msgVitoria.style.display = 'block';
+        }
+
+        checkboxFugiu.addEventListener('change', function () {
+            if (!this.checked) return;
+
+            videoFuga.style.display = 'block';
+            const tentativa = videoFuga.play();
+
+            // Se o vídeo não puder tocar, a mensagem aparece mesmo assim
+            if (tentativa !== undefined) {
+                tentativa.catch(mostrarVitoria);
+            }
+        });
+
+        // Quando o vídeo termina, mostra a mensagem
+        videoFuga.addEventListener('ended', mostrarVitoria);
+
+        // Se nenhum dos dois caminhos do vídeo funcionar, mostra a mensagem
+        videoFuga.querySelector('source:last-of-type').addEventListener('error', mostrarVitoria);
+    </script>
+
+</body>
+</html>

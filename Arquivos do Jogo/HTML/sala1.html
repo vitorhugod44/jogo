@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sala 1</title>
+
+    <style>
+        body {
+            margin: 0;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Checkbox invisível que guarda o estado "escondido" */
+        #estado-escondido {
+            display: none;
+        }
+
+        .sala {
+            position: relative;
+            aspect-ratio: 4 / 3;
+            height: 100vh;
+            max-width: 100vw;
+        }
+
+        .fundo-sala {
+            width: 100%;
+            height: 100%;
+            background-image: url("sala corredor 1.jpg");
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            transition: filter 0.6s ease, box-shadow 0.6s ease;
+        }
+
+        /* Área clicável da porta */
+        .esconder-porta {
+            position: absolute;
+            top: 50%;
+            left: 65%;
+            width: 10%;
+            height: 30%;
+            cursor: pointer;
+
+            clip-path: polygon(1% 3%, 99% 0%, 97% 100%, 0% 93%);
+            z-index: 5;
+        }
+
+        /* Aviso de passos */
+        .aviso-passos {
+            position: absolute;
+            bottom: 10%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.85);
+            color: #ff3333;
+            border: 2px solid #ff3333;
+            padding: 15px 30px;
+            font-size: 20px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            border-radius: 5px;
+            z-index: 10;
+            
+            opacity: 0;
+            pointer-events: none;
+            animation: mostrarAviso 4s ease 5s forwards;
+        }
+
+        @keyframes mostrarAviso {
+            0% { opacity: 0; }
+            15% { opacity: 1; }
+            85% { opacity: 1; }
+            100% { opacity: 0; }
+        }
+
+        /* Contagem regressiva */
+        .contador {
+            position: absolute;
+            top: 4%;
+            right: 4%;
+            background-color: rgba(0, 0, 0, 0.75);
+            color: #ff3333;
+            border: 2px solid #ff3333;
+            padding: 10px 22px;
+            font-size: 32px;
+            font-weight: bold;
+            border-radius: 8px;
+            z-index: 10;
+
+            opacity: 0;
+            animation: exibirContador 0s linear 9s forwards;
+        }
+
+        @keyframes exibirContador {
+            to { opacity: 1; }
+        }
+
+        .contador::after {
+            content: "5";
+            animation: regressiva 8s step-end 9s forwards;
+        }
+
+        @keyframes regressiva {
+            0%    { content: "5"; }
+            12.5% { content: "4"; }
+            25%   { content: "3"; }
+            37.5% { content: "2"; }
+            50%   { content: "1"; }
+            62.5% { content: "0"; }
+            100%  { content: "0"; }
+        }
+
+        /* Tela de morte (caso o tempo acabe sem se esconder) */
+        .tela-morte {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            color: #ff3333;
+            font-size: 48px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            z-index: 20;
+
+            opacity: 0;
+            pointer-events: none;
+            animation: morrer 0.5s ease 17s forwards;
+        }
+
+        @keyframes morrer {
+            to { opacity: 1; pointer-events: auto; }
+        }
+
+        /* Caixa da mensagem de alívio (começa invisível e sem animação) */
+        .mensagem-alivio {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.85);
+            border: 2px solid #ffffff;
+            padding: 25px 40px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            color: #ffffff;
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            z-index: 25;
+
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes mostrarAlivio {
+            to { opacity: 1; pointer-events: auto; }
+        }
+
+        .btn-acao {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 18px;
+            letter-spacing: 2px;
+            padding: 10px 24px;
+            border: 2px solid #ff3333;
+            border-radius: 5px;
+            background-color: transparent;
+            transition: background-color 0.2s, color 0.2s;
+            margin-top: 20px;
+        }
+
+        .btn-acao:hover {
+            background-color: #ff3333;
+            color: #000;
+        }
+
+        .btn-voltar {
+            border-color: #ffffff;
+        }
+
+        .btn-voltar:hover {
+            background-color: #ffffff;
+            color: #000;
+        }
+
+        /* =========================================================
+           AÇÕES QUANDO O JOGADOR CLICA PARA SE ESCONDER
+           ========================================================= */
+
+        /* 1. Escurece a sala */
+        #estado-escondido:checked ~ .fundo-sala {
+            filter: brightness(0.25) contrast(1.1);
+            box-shadow: inset 0 0 150px 60px rgba(0, 0, 0, 0.95);
+        }
+
+        /* 2. Cancela os avisos de perigo, o contador, a morte e o clique na porta */
+        #estado-escondido:checked ~ .aviso-passos,
+        #estado-escondido:checked ~ .contador,
+        #estado-escondido:checked ~ .tela-morte,
+        #estado-escondido:checked ~ .esconder-porta {
+            display: none !important;
+        }
+
+        /* 3. Dispara a contagem de 5 segundos após clicar para mostrar a mensagem de alívio */
+        #estado-escondido:checked ~ .mensagem-alivio {
+            animation: mostrarAlivio 0.5s ease 5s forwards;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="sala">
+        <input type="checkbox" id="estado-escondido">
+        <div class="fundo-sala"></div>
+
+        <label for="estado-escondido" class="esconder-porta"></label>
+
+        <div class="aviso-passos">voce ouviu sons de passos, se esconda!!!</div>
+        <div class="contador"></div>
+
+        <!-- Tela de Game Over (só ativa se o jogador NÃO clicar na porta) -->
+        <div class="tela-morte">
+            <div>VOCE MORREU</div>
+            <a href= "index.html" class="btn-acao">REINICIAR</a>
+        </div>
+
+        <!-- Mensagem que aparece 5 segundos DEPOIS de o jogador clicar para se esconder -->
+        <div class="mensagem-alivio">
+            <div>os passos foram para longe</div>
+            <!-- Troque 'index.html' pelo nome do arquivo do seu corredor se for diferente -->
+            <a href="Corredor 2.html" class="btn-acao btn-voltar">VOLTAR PARA O CORREDOR</a>
+        </div>
+    </div>
+
+</body>
+</html>

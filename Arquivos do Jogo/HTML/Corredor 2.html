@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Corredor - Porta Aberta</title>
+
+    <style>
+        body {
+            margin: 0;
+            background-color: #000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+        }
+
+        .cenario {
+            position: relative;
+            aspect-ratio: 4 / 3;
+            height: 100vh;
+            max-width: 100vw;
+            background-image: url("Corredor 2.jpg"); /* Nome da imagem do corredor com a porta vermelha aberta */
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+        }
+
+        /* Link da porta vermelha aberta ao fundo (levando para a nova página) */
+        .porta-vermelha-aberta {
+            position: absolute;
+            /* Coordenadas ajustadas para a porta vermelha aberta no fundo */
+            top: 34%;
+            left: 45%;
+            width: 5.4%;
+            height: 12.9%;
+            cursor: pointer;
+            background-color: transparent; /* Invisível (mude para rgba(0,255,0,0.3) se quiser testar a posição) */
+            border: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="cenario">
+        <!-- A porta vermelha agora leva direto para a nova página -->
+        <a href="escada.html" class="porta-vermelha-aberta"></a>
+    </div>
+
+</body>
+</html>
